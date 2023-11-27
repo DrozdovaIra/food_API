@@ -1,0 +1,126 @@
+openapi: 3.0.2
+info:
+  title: "Auth API"
+  version: "1.0.0"
+  description: Документация API по Авторизации
+  contact:
+    name: Дроздова Ирина
+    email: drozdova@surf.dev
+
+servers:
+  - url: https://uzhindoma.ru/
+    description: Test server dev1
+
+components:
+  securitySchemes:
+    AuthApiKey:
+      description: Ключ авторизованного пользователя
+      type: apiKey
+      in: header
+      name: Authorization  
+
+security:
+  - AuthApiKey: []
+
+paths:
+  /login/sms_code:
+    post:
+      summary: Вход в приложение
+      description: Получение смс кода
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "models.yaml#/components/schemas/LoginRequest"
+      responses:
+        '204':
+          description: "Успешно"
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/LoginResponse-sms"
+        '400':
+          description: "Неверный номер телефона"
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/LoginResponse-sms-error"
+        '500':
+          description: "Произошла ошибка загрузки данных, попробуйте обновить экран позже"
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/LoginResponse-sms-error500"
+  /login/sms_code/verify:
+    post:
+      summary: Валидация смс кода
+      description: Валидация смс кода
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "models.yaml#/components/schemas/LoginRequest-sms"
+      responses:
+        '204':
+          description: "Успешно"
+          
+        '400':
+          description: "Произошла ошибка загрузки данных, попробуйте обновить экран позже"
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/LoginResponse-sms-error400"
+          
+        '500':
+          description: "Произошла ошибка загрузки данных, попробуйте обновить экран позже"
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/LoginResponse-sms-error500"
+  /catalog:
+    get:
+      summary: Каталог
+      description: Список блюд из каталога
+      parameters: 
+        - name: offset
+          in: query
+          description: Количество элементов, которые необходимо пропустить перед началом сбора результирующего набора
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          description: Количество товаров, подлежащих возврату
+          schema:
+            type: integer
+        - name: filter_parameters
+          in: query
+          description: Фильтры параметров
+          schema:
+            type: string
+      security:  
+        - AuthApiKey: []
+      responses:
+        '200':
+          description: "Успешно"
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/Response-catalog"
+        '400':
+          description: "Произошла ошибка загрузки данных, попробуйте обновить экран позже"
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/LoginResponse-sms-error400"
+          
+        '500':
+          description: "Произошла ошибка загрузки данных, попробуйте обновить экран позже"
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/LoginResponse-sms-error500"
+

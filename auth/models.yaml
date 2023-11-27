@@ -1,0 +1,93 @@
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    authApiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  schemas:
+    LoginRequest:
+      type: object
+      properties:
+        phone-number:
+          description: Номер телефона
+          type: string
+          example: "79001234567"
+          minLength: "11"
+          maxLength: "11"
+    LoginResponse-sms:
+      type: object
+      properties:
+        SMS-code:
+          description: СМС-код
+          type: string
+          example: "5555"
+              
+    LoginResponse-sms-error:
+      type: object
+      properties:
+        errorMessage:
+          description: Bad Request
+          type: string
+          example: "Неверный номер телефона"
+
+    LoginResponse-sms-error500:
+      type: object
+      properties:
+        errorMessage:
+          description: Ошибка сервера
+          type: string
+          example: "Произошла ошибка загрузки данных, попробуйте обновить экран позже"
+      
+    LoginResponse-sms-error400:
+      type: object
+      properties:
+        errorMessage:
+          description: Ошибка на стороне клиента
+          type: string
+          example: "Произошла ошибка загрузки данных, попробуйте обновить экран позже"
+
+    LoginRequest-sms:
+      type: object
+      properties:
+        phone-number:
+          description: Номер телефона
+          type: string
+          example: "79001234567"
+        sms-code:
+          description: СМС-код
+          type: string
+          example: "5555"
+          minLength: "4"
+          maxLength: "4"
+
+    Response-catalog:
+      type: object
+      properties:
+        id:
+          description: id блюда
+          type: string
+          example: "5555666666666666"
+        name:
+          description: Название блюда
+          type: string
+          example: "Лазанья"
+        price:
+          description: Стоимость блюда
+          type: string
+          example: "600 рублей"
+        time_cooking:
+          description: Время приготовления
+          type: string
+          example: "30 минут"
+        count:
+          description: Количество товара
+          type: integer
+          example: 2
+        foto:
+          description: Фото блюда
+          type: string
+          example: "https://uzhindoma.ru/upload/nlkn.jpg"
